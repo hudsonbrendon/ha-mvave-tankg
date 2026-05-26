@@ -101,9 +101,14 @@ display shows the bank (`(N-1) // 4 + 1`) and the lit footswitch is the position
 
 Presence and signal strength come from BLE advertisements (push, no connection
 needed). Preset changes connect on demand and write a BLE-MIDI **Program Change**
-(MIDI channel 0, program 0–35) to the standard BLE-MIDI characteristic
-(`7772e5db-…`). The full BLE protocol observed during reconnaissance — services,
-characteristics, and the confirmed preset frames — is documented in
+(MIDI channel 0, program 0–35) to the standard BLE-MIDI characteristic.
+
+All the Bluetooth work — discovery, the command frames, and the device
+connection — lives in a separate Python library,
+[**`mvave-tankg-ble`**](https://github.com/hudsonbrendon/mvave-tankg-ble)
+([PyPI](https://pypi.org/project/mvave-tankg-ble/)), which this integration pulls
+in automatically via `manifest.json` `requirements`. The full BLE protocol
+observed during reconnaissance is documented in
 [`docs/PROTOCOL.md`](docs/PROTOCOL.md).
 
 ## Limitations
@@ -114,7 +119,9 @@ characteristics, and the confirmed preset frames — is documented in
 - **One Bluetooth client at a time** — close the official M-Vave app while Home
   Assistant is controlling the pedal.
 - **No battery level.** The Tank-G doesn't expose the standard Battery Service
-  (`0x180F`), so battery isn't available.
+  (`0x180F`), and the official M-Vave app shows no battery either — the pedal
+  simply doesn't report battery over BLE (only the physical "L"/"LO" display
+  warning and the charge LED).
 - **No LED colour control yet** — it requires capturing the vendor protocol;
   tracked as future work in `docs/PROTOCOL.md`.
 - **Can't power the pedal on/off over BLE** — the radio is off when the pedal is

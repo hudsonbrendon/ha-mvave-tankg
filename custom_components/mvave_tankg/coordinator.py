@@ -1,4 +1,4 @@
-"""Coordinator: tracks presence via advertisements, polls battery via connection."""
+"""Coordinator: tracks presence/RSSI via advertisements, switches presets via BLE."""
 from __future__ import annotations
 
 import logging
@@ -15,26 +15,19 @@ from homeassistant.const import CONF_ADDRESS
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import CONNECTION_BLUETOOTH, DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from mvave_tankg_ble import TankG
 
-from .ble_midi import program_change_frame
-from .const import (
-    BATTERY_LEVEL_CHAR_UUID,
-    DOMAIN,
-    HAS_STANDARD_BATTERY,
-    MIDI_IO_CHAR_UUID,
-)
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 _POLL_INTERVAL = timedelta(minutes=5)
 
 
 class TankGCoordinator(DataUpdateCoordinator[dict]):
-    """Holds device state and BLE access."""
+    """Holds device presence/RSSI and switches presets over BLE."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
-        super().__init__(
-            hass, _LOGGER, name=DOMAIN, update_interval=_POLL_INTERVAL
-        )
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=_POLL_INTERVAL)
         self.address: str = entry.unique_id or entry.data[CONF_ADDRESS]
         self._entry = entry
         self.present: bool = False
@@ -78,57 +71,18 @@ class TankGCoordinator(DataUpdateCoordinator[dict]):
         self.async_update_listeners()
 
     async def _async_update_data(self) -> dict:
-        """Refresh presence; read battery if supported by recon findings."""
+        """Refresh presence from the bluetooth manager (RSSI comes via callback)."""
         self.present = bluetooth.async_address_present(
             self.hass, self.address, connectable=False
         )
-        data: dict = {"battery": self.data.get("battery") if self.data else None}
-        if HAS_STANDARD_BATTERY and self.present:
-            data["battery"] = await self._read_battery()
-        return data
+        return {}
 
-    async def _read_battery(self) -> int | None:
-        from bleak_retry_connector import (
-            BleakClientWithServiceCache,
-            establish_connection,
-        )
-
+    async def async_set_preset(self, preset: int) -> None:
+        """Switch the pedal to UI preset 1-36 over BLE-MIDI."""
         ble_device = bluetooth.async_ble_device_from_address(
             self.hass, self.address, connectable=True
         )
         if ble_device is None:
             raise UpdateFailed("dispositivo não conectável no momento")
-        client = await establish_connection(
-            BleakClientWithServiceCache, ble_device, self.address
-        )
-        try:
-            raw = await client.read_gatt_char(BATTERY_LEVEL_CHAR_UUID)
-            return int(raw[0])
-        finally:
-            await client.disconnect()
-
-    async def async_send_program_change(self, program: int) -> None:
-        """Send a BLE-MIDI Program Change to switch preset."""
-        from bleak_retry_connector import (
-            BleakClientWithServiceCache,
-            establish_connection,
-        )
-
-        from .const import MIDI_CHANNEL
-
-        ble_device = bluetooth.async_ble_device_from_address(
-            self.hass, self.address, connectable=True
-        )
-        if ble_device is None:
-            raise UpdateFailed("dispositivo não conectável no momento")
-        client = await establish_connection(
-            BleakClientWithServiceCache, ble_device, self.address
-        )
-        try:
-            await client.write_gatt_char(
-                MIDI_IO_CHAR_UUID,
-                program_change_frame(program, MIDI_CHANNEL),
-                response=False,
-            )
-        finally:
-            await client.disconnect()
+        async with TankG(ble_device) as pedal:
+            await pedal.set_preset(preset)

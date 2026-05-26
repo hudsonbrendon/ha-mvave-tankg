@@ -4,8 +4,10 @@ from homeassistant.components.bluetooth import BluetoothServiceInfoBleak
 from homeassistant.config_entries import SOURCE_BLUETOOTH
 from homeassistant.data_entry_flow import FlowResultType
 
+from mvave_tankg_ble.const import MIDI_SERVICE_UUID
+
 from custom_components.mvave_tankg.config_flow import _is_tankg
-from custom_components.mvave_tankg.const import DOMAIN, MIDI_SERVICE_UUID
+from custom_components.mvave_tankg.const import DOMAIN
 
 
 def _info(name="", uuids=None):

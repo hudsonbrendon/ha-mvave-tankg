@@ -29,8 +29,13 @@
 ## Battery Service 0x180F presente? (sim/não)
 
 **Não.** O serviço `0000180f-...` / char `00002a19-...` **não** foi listado.
-→ `HAS_STANDARD_BATTERY = False`. Bateria padrão indisponível; só seria possível via
-protocolo proprietário (serviço vendor `0xAE40`) ou SysEx — depende da Task A3 (HCI snoop).
+→ `HAS_STANDARD_BATTERY = False`.
+
+**Veredito final (bateria descartada):** o app oficial M-Vave **não exibe bateria** de forma
+alguma. Como o app tem acesso completo ao protocolo BLE do pedal, a ausência de qualquer
+indicação de bateria no app confirma que o Tank-G **não reporta nível de bateria por BLE** —
+existe só o aviso físico no display ("L"/"LO") e o LED de carga (vermelho→azul). Bateria no
+Home Assistant é **inviável**; não adianta capturar para isso.
 
 ## Característica BLE-MIDI presente? (sim/não + UUID)
 
@@ -75,3 +80,30 @@ A Task A3 (captura HCI snoop com o app oficial) deve revelar se preset/LED/bater
 
 Só **LED** e **bateria** dependem do HCI snoop. Presença, RSSI e **preset** já estão prontos
 para virar código (Fase B/C/D) sem Android.
+
+## Sonda sem Android (recon/cuvave_probe.py) — resultado
+
+Tentativa de descobrir bateria/estado sem capturar o app, usando o framing Cuvave conhecido
+(`F0 00 32 ... F7`, ver Referências). Conectado ao pedal, assinados os notifies de `ae42`
+(vendor) e `7772e5db` (MIDI), foram enviados comandos **de consulta** nos dois transportes:
+
+| Comando | ae41 (raw) | MIDI (framed) | Resposta |
+|---|---|---|---|
+| MIDI Identity Request `F0 7E 7F 06 01 F7` | enviado | enviado | **nenhuma** |
+| Cuvave discovery `F0 00 32 45 ...` | enviado | enviado | **nenhuma** |
+| Cuvave settings `F0 00 32 0D 41 ...` | enviado | enviado | **nenhuma** |
+
+Também **nenhuma notificação espontânea** em 6 s de escuta (sem heartbeat de estado/bateria).
+
+**Conclusão:** o Tank-G não responde aos comandos da Chocolate nem ao Identity Request, e não
+empurra estado sozinho. Os opcodes específicos do Tank-G (bateria/LED/nome de preset) só saem
+capturando o app oficial (Task A3 — HCI snoop no Android) e decodificando com o framing
+`F0 00 32 ... F7`. Provável que o app faça um handshake inicial pela char vendor `ae41` que
+"abre" o canal `ae42` — sem replicá-lo, o vendor fica mudo.
+
+## Referências (família Cuvave/M-Vave)
+
+- Framing SysEx Cuvave: `F0 00 32 [cmd] [dados] [checksum] F7`, manufacturer id `00 32`.
+  Fonte: https://github.com/cbix/mvave-chocolate-sysex (engenharia reversa da Chocolate).
+- A Chocolate confirmou que "SysEx pela char BLE-MIDI padrão não funciona" — coerente com o
+  Tank-G usar o serviço vendor `0xAE40` (`ae41`/`ae42`) como canal real de config.

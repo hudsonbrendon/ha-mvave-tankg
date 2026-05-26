@@ -11,6 +11,6 @@
   "documentation": "https://github.com/hudsonbrendon/ha-mvave-tankg",
   "integration_type": "device",
   "iot_class": "local_push",
-  "requirements": ["bleak-retry-connector>=3.5.0"],
-  "version": "0.1.2"
+  "requirements": ["mvave-tankg-ble>=0.1.0"],
+  "version": "0.2.0"
 }
