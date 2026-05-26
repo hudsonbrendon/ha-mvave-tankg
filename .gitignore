@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+.venv-recon/
+.pytest_cache/
+*.egg-info/
+.coverage
+htmlcov/
+tankg_capture*/
+*.zip
