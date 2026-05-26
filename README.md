@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/cuvave-logo.png" alt="M-Vave / Cuvave" width="360">
+</p>
+
 # M-Vave Tank-G for Home Assistant
 
 [![Tests](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/test.yml/badge.svg)](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/test.yml)
@@ -10,6 +14,10 @@ Auto-discovers an **M-Vave Tank-G** guitar multi-effects pedal over Bluetooth LE
 and exposes presence, signal strength, and preset selection in Home Assistant.
 Presets are switched over BLE-MIDI (Program Change), the same channel the
 official M-Vave app uses.
+
+<p align="center">
+  <img src="assets/tank-g.jpg" alt="M-Vave Tank-G pedal" width="520">
+</p>
 
 ## Features
 
