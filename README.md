@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="assets/cuvave-logo.png" alt="M-Vave / Cuvave" width="360">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/cuvave-logo-white.png">
+    <img src="assets/cuvave-logo-black.png" alt="M-Vave / Cuvave" width="360">
+  </picture>
 </p>
 
 # M-Vave Tank-G for Home Assistant
