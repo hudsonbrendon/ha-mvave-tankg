@@ -1,0 +1,13 @@
+pytest
+pytest-asyncio
+pytest-homeassistant-custom-component
+
+# Runtime deps of the HA bluetooth/usb components (installed by HA at runtime,
+# needed explicitly for the test harness).
+aiousbwatcher
+habluetooth
+bluetooth-adapters
+bluetooth-data-tools
+bleak
+bleak-retry-connector
+dbus-fast
