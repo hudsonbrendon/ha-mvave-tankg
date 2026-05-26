@@ -4,7 +4,40 @@ from homeassistant.components.bluetooth import BluetoothServiceInfoBleak
 from homeassistant.config_entries import SOURCE_BLUETOOTH
 from homeassistant.data_entry_flow import FlowResultType
 
-from custom_components.mvave_tankg.const import DOMAIN
+from custom_components.mvave_tankg.config_flow import _is_tankg
+from custom_components.mvave_tankg.const import DOMAIN, MIDI_SERVICE_UUID
+
+
+def _info(name="", uuids=None):
+    return BluetoothServiceInfoBleak(
+        name=name,
+        address="AA:BB:CC:DD:EE:FF",
+        rssi=-55,
+        manufacturer_data={},
+        service_data={},
+        service_uuids=uuids or [],
+        source="local",
+        device=None,
+        advertisement=None,
+        connectable=True,
+        time=0,
+        tx_power=-127,
+    )
+
+
+def test_is_tankg_by_name():
+    assert _is_tankg(_info(name="TANK-Gv2_BLE"))
+
+
+def test_is_tankg_by_service_uuid_without_name():
+    # passive scanners may not capture the name — match on the BLE-MIDI service.
+    assert _is_tankg(_info(name="", uuids=[MIDI_SERVICE_UUID]))
+
+
+def test_is_tankg_rejects_other_device():
+    assert not _is_tankg(
+        _info(name="SomeLight", uuids=["0000180f-0000-1000-8000-00805f9b34fb"])
+    )
 
 SERVICE_INFO = BluetoothServiceInfoBleak(
     name="TANK-Gv2_BLE",
