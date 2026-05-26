@@ -1,0 +1,17 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "bluetooth_confirm": {
+        "description": "Adicionar a pedaleira {name}?"
+      },
+      "user": {
+        "data": { "address": "Dispositivo" }
+      }
+    },
+    "abort": {
+      "no_devices_found": "Nenhum Tank-G encontrado por perto. Ligue o pedal e ative o Bluetooth (segure os footswitches B+C por 3 s).",
+      "already_configured": "Este dispositivo já está configurado."
+    }
+  }
+}
