@@ -2,15 +2,25 @@
   "domain": "mvave_tankg",
   "name": "M-Vave Tank-G",
   "bluetooth": [
-    { "service_uuid": "03b80e5a-ede8-4b33-a751-6ce34ec4c700" },
-    { "local_name": "TANK-G*" }
+    {
+      "service_uuid": "03b80e5a-ede8-4b33-a751-6ce34ec4c700"
+    },
+    {
+      "local_name": "TANK-G*"
+    }
   ],
-  "codeowners": ["@hudsonbrendon"],
+  "codeowners": [
+    "@hudsonbrendon"
+  ],
   "config_flow": true,
-  "dependencies": ["bluetooth_adapters"],
+  "dependencies": [
+    "bluetooth_adapters"
+  ],
   "documentation": "https://github.com/hudsonbrendon/ha-mvave-tankg",
   "integration_type": "device",
   "iot_class": "local_push",
-  "requirements": ["mvave-tankg-ble>=0.1.0"],
-  "version": "0.2.1"
+  "requirements": [
+    "mvave-tankg-ble>=0.1.0"
+  ],
+  "version": "0.2.2"
 }

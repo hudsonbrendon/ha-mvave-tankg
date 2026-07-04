@@ -1,6 +1,7 @@
 """Coordinator: tracks presence/RSSI via advertisements, switches presets via BLE."""
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import timedelta
 
@@ -84,5 +85,9 @@ class TankGCoordinator(DataUpdateCoordinator[dict]):
         )
         if ble_device is None:
             raise UpdateFailed("dispositivo não conectável no momento")
-        async with TankG(ble_device) as pedal:
-            await pedal.set_preset(preset)
+        try:
+            async with asyncio.timeout(30):
+                async with TankG(ble_device) as pedal:
+                    await pedal.set_preset(preset)
+        except TimeoutError as err:
+            raise UpdateFailed("timeout conectando ao Tank-G via BLE") from err

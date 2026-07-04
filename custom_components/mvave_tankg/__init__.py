@@ -18,6 +18,10 @@ type TankGConfigEntry = ConfigEntry[TankGCoordinator]
 
 async def async_setup_entry(hass: HomeAssistant, entry: TankGConfigEntry) -> bool:
     coordinator = TankGCoordinator(hass, entry)
+    # Release the BT advertisement callback registered by async_start even
+    # when setup fails afterwards (e.g. ConfigEntryNotReady from the first
+    # refresh); otherwise every setup retry leaks a callback registration.
+    entry.async_on_unload(coordinator.async_stop)
     await coordinator.async_start()
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
@@ -25,7 +29,4 @@ async def async_setup_entry(hass: HomeAssistant, entry: TankGConfigEntry) -> boo
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: TankGConfigEntry) -> bool:
-    unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unloaded:
-        await entry.runtime_data.async_stop()
-    return unloaded
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
