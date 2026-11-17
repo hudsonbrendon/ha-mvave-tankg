@@ -19,6 +19,7 @@
   "documentation": "https://github.com/hudsonbrendon/ha-mvave-tankg",
   "integration_type": "device",
   "iot_class": "local_push",
+  "issue_tracker": "https://github.com/hudsonbrendon/ha-mvave-tankg/issues",
   "requirements": [
     "mvave-tankg-ble>=0.1.0"
   ],
