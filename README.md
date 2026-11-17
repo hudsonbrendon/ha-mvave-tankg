@@ -1,4 +1,18 @@
 <p align="center">
+  <img src="custom_components/mvave_tankg/brand/logo@2x.png" alt="M-Vave Tank-G" height="128">
+</p>
+
+# M-Vave Tank-G
+
+[![Tests](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/tests.yml/badge.svg)](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/tests.yml)
+[![Hassfest](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/hassfest.yml/badge.svg)](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/hassfest.yml)
+[![HACS](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/validate.yml/badge.svg)](https://github.com/hudsonbrendon/ha-mvave-tankg/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/hudsonbrendon/ha-mvave-tankg?sort=semver)](https://github.com/hudsonbrendon/ha-mvave-tankg/releases)
+[![Downloads](https://img.shields.io/github/downloads/hudsonbrendon/ha-mvave-tankg/total)](https://github.com/hudsonbrendon/ha-mvave-tankg/releases)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/)
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.8.0%2B-18BCF2?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
+[![License](https://img.shields.io/github/license/hudsonbrendon/ha-mvave-tankg)](LICENSE)
+
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/cuvave-logo-white.png">
     <img src="assets/cuvave-logo-black.png" alt="M-Vave / Cuvave" width="360">
@@ -41,6 +55,9 @@ official M-Vave app uses.
 - An M-Vave Tank-G pedal.
 
 ## Installation
+
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hudsonbrendon&repository=ha-mvave-tankg&category=integration)
+[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=mvave_tankg)
 
 ### HACS (recommended)
 

@@ -10,7 +10,6 @@ from homeassistant.components.bluetooth import (
 )
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_ADDRESS
-
 from mvave_tankg_ble.const import MIDI_SERVICE_UUID
 
 from .const import DOMAIN
