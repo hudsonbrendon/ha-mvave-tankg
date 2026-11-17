@@ -8,8 +8,10 @@ mvave-tankg-ble>=0.1.0
 # Runtime deps of the HA bluetooth/usb components (installed by HA at runtime,
 # needed explicitly for the test harness).
 aiousbwatcher
+serialx
 habluetooth
 bluetooth-adapters
+bluetooth-auto-recovery
 bluetooth-data-tools
 bleak
 bleak-retry-connector
